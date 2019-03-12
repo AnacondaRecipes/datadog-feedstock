@@ -1,6 +1,6 @@
 {% set name = "datadog" %}
-{% set version = "0.26.0" %}
-{% set sha256 = "cbaa6b4b2b88fd552605e6730f60d5437017bb76d6b701432eaafbc983735b79" %}
+{% set version = "0.27.0" %}
+{% set sha256 = "9487480fd4b5898b665384f95eeb0cbca4ec998bb58224b7bb60fff3978191ad" %}
 
 package:
   name: {{ name|lower }}
@@ -27,7 +27,6 @@ requirements:
     - python
     - decorator >=3.3.2
     - requests >=2.6.0
-    - simplejson >=2.0.9
 
 test:
   imports:
