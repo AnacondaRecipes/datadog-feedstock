@@ -18,6 +18,8 @@ build:
   entry_points:
     - dog = datadog.dogshell:main
     - dogwrap = datadog.dogshell.wrap:main
+    - dogshell = datadog.dogshell:main
+    - dogshellwrap = datadog.dogshell.wrap:main
 
 requirements:
   host:
