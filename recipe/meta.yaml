@@ -1,26 +1,25 @@
 {% set name = "datadog" %}
 {% set version = "0.52.1" %}
-{% set sha256 = "44c6deb563c4522dba206fba2e2bb93d3b04113c40191851ba3a241d82b5fd0b" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: "44c6deb563c4522dba206fba2e2bb93d3b04113c40191851ba3a241d82b5fd0b"
+  patches:
+    - windows_socket_fix.patch  # [win]
 
 build:
-  noarch: python
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - dog = datadog.dogshell:main
     - dogwrap = datadog.dogshell.wrap:main
     - dogshell = datadog.dogshell:main
     - dogshellwrap = datadog.dogshell.wrap:main
-  skip: true  # [py<27]
+  skip: true  # [py>27 and py<37]
 
 requirements:
   host:
@@ -34,11 +33,17 @@ requirements:
     - configparser <5  # [py<30]
 
 test:
+  source_files:
+    - tests
   imports:
     - datadog
     - datadog.dogshell
   requires:
     - pip
+    - pytest
+    - mock
+    - freezegun
+    - psutil
   commands:
     - pip check
     - dog --help
