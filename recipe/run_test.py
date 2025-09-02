@@ -4,6 +4,7 @@ import os
 import sys
 import subprocess
 import importlib
+import platform
 
 def run_command(cmd, shell=False):
     if isinstance(cmd, str) and not shell:
@@ -19,13 +20,21 @@ def run_command(cmd, shell=False):
 
 def main():
     os.environ['DD_ORIGIN_DETECTION_ENABLED'] = 'false'
-    base_cmd = ['pytest', '-v', 'tests/unit', '--ignore=tests/unit/dogstatsd/test_container.py']
+    base_cmd = [
+        'pytest', '-v', 'tests/unit' '--ignore=tests/unit/dogstatsd/test_container.py'
+    ]
 
+    # Build the exclusion filter
+    exclusions = ['not test_timed_coroutine']
+
+    # On Linux, exclude the IPv6 test that fails in containers
+    if platform.system() == 'Linux':
+        exclusions.append('not test_dedicated_udp6_telemetry_dest')
+    # On Windows, exclude the tests related to sockets
     if sys.version_info < (3, 13) and os.name == 'nt':
         base_cmd.extend(['--ignore=tests/unit/dogstatsd/test_statsd.py'])
     else:
-        base_cmd.extend(['-k', 'not test_timed_coroutine'])
-
+        base_cmd.extend(['-k', ' and '.join(exclusions)])
     run_command(base_cmd)
 
 if __name__ == "__main__":
