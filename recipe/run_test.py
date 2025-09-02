@@ -21,7 +21,7 @@ def run_command(cmd, shell=False):
 def main():
     os.environ['DD_ORIGIN_DETECTION_ENABLED'] = 'false'
     base_cmd = [
-        'pytest', '-v', 'tests/unit' '--ignore=tests/unit/dogstatsd/test_container.py'
+        'pytest', '-v', 'tests/unit', '--ignore=tests/unit/dogstatsd/test_container.py'
     ]
 
     # Build the exclusion filter
