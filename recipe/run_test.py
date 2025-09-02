@@ -18,7 +18,7 @@ def run_command(cmd, shell=False):
     return result
 
 def main():
-
+    os.environ['DD_ORIGIN_DETECTION_ENABLED'] = 'false'
     base_cmd = ['pytest', '-v', 'tests/unit', '--ignore=tests/unit/dogstatsd/test_container.py']
 
     if sys.version_info < (3, 13) and os.name == 'nt':
