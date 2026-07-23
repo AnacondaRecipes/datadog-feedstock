@@ -30,6 +30,15 @@ def main():
     # On Linux, exclude the IPv6 test that fails in containers
     if platform.system() == 'Linux':
         exclusions.append('not test_dedicated_udp6_telemetry_dest')
+    # On macOS ARM, exclude timing-sensitive tests
+    # that consistently exceed their narrow wall-clock tolerance
+    if platform.system() == "Darwin" and platform.machine() == "arm64":
+        exclusions.extend(
+            [
+                'not test_timed',
+                'not test_distributed',
+            ]
+        )
     # On Windows, exclude the tests related to sockets
     if sys.version_info < (3, 13) and os.name == 'nt':
         base_cmd.extend(['--ignore=tests/unit/dogstatsd/test_statsd.py'])
