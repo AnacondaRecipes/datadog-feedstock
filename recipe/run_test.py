@@ -40,7 +40,7 @@ def main():
             ]
         )
     # On Windows, exclude the tests related to sockets
-    if sys.version_info < (3, 13) and os.name == 'nt':
+    if os.name == 'nt':
         base_cmd.extend(['--ignore=tests/unit/dogstatsd/test_statsd.py'])
     else:
         base_cmd.extend(['-k', ' and '.join(exclusions)])
