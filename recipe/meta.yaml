@@ -10,6 +10,7 @@ source:
   sha256: d24085e33b9be2ec4d8fd413998ad0012a609ad022e1b8a59c171391d1753790
   patches:
     - windows_socket_fix.patch  # [win]
+    - windows_af_unix_guard.patch  # [win]
 
 build:
   number: 0

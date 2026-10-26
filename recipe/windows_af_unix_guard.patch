@@ -1,0 +1,11 @@
+--- datadog/dogstatsd/base.py
++++ datadog/dogstatsd/base.py
+@@ -714,7 +714,7 @@
+         if new_socket:
+             try:
+                 self._socket_kind = new_socket.getsockopt(socket.SOL_SOCKET, socket.SO_TYPE)
+-                if new_socket.family == socket.AF_UNIX:
++                if hasattr(socket, 'AF_UNIX') and new_socket.family == socket.AF_UNIX:
+                     if self._socket_kind == socket.SOCK_STREAM:
+                         self._transport = "uds-stream"
+                     else:
