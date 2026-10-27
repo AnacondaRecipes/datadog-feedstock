@@ -39,7 +39,9 @@ def main():
                 'not test_distributed',
             ]
         )
-    # On Windows, exclude the tests related to sockets
+    # On Windows (py<3.13), exclude the tests related to sockets; py>=3.13
+    # runs test_statsd.py with the Windows-incompatible tests individually
+    # skipped via windows_socket_fix.patch
     if sys.version_info < (3, 13) and os.name == 'nt':
         base_cmd.extend(['--ignore=tests/unit/dogstatsd/test_statsd.py'])
     else:

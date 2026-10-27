@@ -1,5 +1,5 @@
 {% set name = "datadog" %}
-{% set version = "0.52.2" %}
+{% set version = "0.55.0" %}
 
 package:
   name: {{ name }}
@@ -7,9 +7,10 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: a74b1704ce37f3d9a0c36b1a87127c45032171726a01960bd210a549f1400849
+  sha256: d24085e33b9be2ec4d8fd413998ad0012a609ad022e1b8a59c171391d1753790
   patches:
     - windows_socket_fix.patch  # [win]
+    - windows_af_unix_guard.patch  # [win]
 
 build:
   number: 0
