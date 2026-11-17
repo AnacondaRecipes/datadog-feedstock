@@ -59,7 +59,7 @@ about:
   description: |
     The Python integration enables you to monitor any custom metric by instrumenting a few lines of code.
   doc_url: https://docs.datadoghq.com/integrations/python/
-  dev_url: https://github.com/DataDog/datadogpy/tree/v0.56.0
+  dev_url: https://github.com/DataDog/datadogpy
 
 extra:
   recipe-maintainers:
