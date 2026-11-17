@@ -64,7 +64,15 @@
      def test_stop_is_bounded_with_a_stuck_timestamped_payload(self):
          # requeue_front() puts a failed payload back ahead of the Stop
          # sentinel, and timestamped payloads are exempt from the queue's
-@@ -4623,6 +4631,7 @@
+@@ -4601,6 +4609,7 @@
+         self.assertIsNone(statsd._queue)
+         self.assertEqual(statsd.packets_dropped_writer, 1, "the abandoned payload must be accounted for")
+ 
++    @pytest.mark.skipif(os.name == 'nt', reason="Unix sockets not supported on Windows")
+     def test_second_stop_stays_false_after_background_abort(self):
+         # If an initial stop(timeout) returns False because it timed out while
+         # the sender was still draining, and that sender later exits by
+@@ -4623,6 +4632,7 @@
              self.assertIs(statsd.stop(1.0), False)
              self.assertGreaterEqual(statsd.packets_dropped_writer, 1)
  
@@ -72,7 +80,7 @@
      def test_pre_fork_is_bounded_with_a_stuck_timestamped_payload(self):
          # Same starvation, reached through pre_fork() -- which matters more:
          # it is installed as an os.register_at_fork hook, has no timeout
-@@ -4645,6 +4654,7 @@
+@@ -4645,6 +4655,7 @@
          self.assertIsNone(statsd._sender_thread, "pre_fork() should have stopped the sender")
          self.assertEqual(statsd.packets_dropped_writer, 1, "the abandoned payload must be accounted for")
  
@@ -80,7 +88,7 @@
      def test_stop_interrupts_a_long_retry_backoff_instead_of_waiting_it_out(self):
          # The backoff cap is a full minute. A plain time.sleep() would make
          # stop() wait out however much of it is left; the DRAINING transition
-@@ -4660,6 +4670,7 @@
+@@ -4660,6 +4671,7 @@
              self.assertIs(self._call_bounded(statsd.stop, ()), False, "the payload was never delivered")
              self.assertLess(time.time() - t0, 5.0, "stop() waited out the backoff sleep")
  
@@ -88,7 +96,7 @@
      def test_sender_can_restart_after_a_stop_resets_the_lifecycle_state(self):
          # DRAINING/ABORTED from a prior sender must not leak into a fresh
          # sender start, or the replacement would exit immediately.
-@@ -4713,6 +4724,7 @@
+@@ -4713,6 +4725,7 @@
          self.assertEqual(statsd.packets_dropped_queue, 0)
          self.assertEqual(statsd.packets_dropped_writer, 0)
  
